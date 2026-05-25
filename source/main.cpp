@@ -33,7 +33,7 @@ int main(void)
     groundDef.type = b2_staticBody;
     groundDef.position.Set(
         (screenWidth / 2.0f) / SCALE,
-        (screenHeight - 40.0f) / SCALE
+        (screenHeight - 70.0f) / SCALE
     );
 
     b2PolygonShape groundShape;
@@ -55,7 +55,7 @@ int main(void)
         cajas.push_back(
             new Caja(
                 world,
-                350, 500,
+                350, 450,
                 40, 40,
                 RED,
                 0.0f
@@ -65,20 +65,100 @@ int main(void)
         cajas.push_back(
             new Caja(
                 world,
-                450, 500,
+                450, 450,
                 40, 40,
                 BLUE,
-                12.0f
+                0.0f
             )
         );
 
         cajas.push_back(
             new Caja(
                 world,
-                550, 500,
+                550, 450,
                 40, 40,
                 GREEN,
-                -8.0f
+                0.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                280, 450,
+                40, 40,
+                ORANGE,
+                -10.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                340, 470,
+                50, 50,
+                PURPLE,
+                15.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                410, 455,
+                35, 35,
+                GOLD,
+                -20.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                480, 490,
+                60, 40,
+                PINK,
+                8.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                560, 460,
+                45, 45,
+                SKYBLUE,
+                -5.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                630, 500,
+                40, 60,
+                LIME,
+                25.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                700, 450,
+                55, 35,
+                MAROON,
+                -12.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                770, 480,
+                40, 40,
+                DARKBLUE,
+                18.0f
             )
         );
 #pragma endregion

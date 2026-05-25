@@ -30,9 +30,9 @@ void Caja::Draw()
     b2Vec2 pos = body->GetPosition();
     float angle = body->GetAngle() * RAD2DEG;
 
-    Rectangle rect = {
-        (pos.x * SCALE) - width / 2.0f,
-        (pos.y * SCALE) - height / 2.0f,
+    Rectangle rect = {  //ahora esta bien con el centro del rectangulo
+        pos.x * SCALE,
+        pos.y * SCALE,
         width,
         height
     };
@@ -40,5 +40,50 @@ void Caja::Draw()
     Vector2 origin = { width / 2.0f, height / 2.0f };
 
     DrawRectanglePro(rect, origin, angle, color);
-    //DrawRectangleLinesEx(rect, 2, DARKBLUE); // debug
+
+    //debug
+    if (DEBUG_MODE)
+    {
+        b2Fixture* fixture = body->GetFixtureList();
+
+        if (fixture)
+        {
+            b2PolygonShape* poly =
+                (b2PolygonShape*)fixture->GetShape();
+
+            Vector2 points[b2_maxPolygonVertices];
+
+            for (int i = 0; i < poly->m_count; i++)
+            {
+                b2Vec2 worldPoint =
+                    body->GetWorldPoint(poly->m_vertices[i]);
+
+                points[i] = {
+                    worldPoint.x * SCALE,
+                    worldPoint.y * SCALE
+                };
+            }
+
+            for (int i = 0; i < poly->m_count; i++)
+            {
+                int next = (i + 1) % poly->m_count;
+
+                DrawLineEx(
+                    points[i],
+                    points[next],
+                    2.0f,
+                    BLACK
+                );
+            }
+        }
+
+        DrawCircleV(
+            {
+                pos.x * SCALE,
+                pos.y * SCALE
+            },
+            4,
+            YELLOW
+        );
+    }
 }

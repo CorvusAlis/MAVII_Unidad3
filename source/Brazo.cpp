@@ -6,8 +6,8 @@ BrazoGarra::BrazoGarra(b2World& world, b2Body* garraBaseBody, bool ladoIzquierdo
     izquierdo = ladoIzquierdo;
     brazoTexture = LoadTexture("assets/brazo_cm.png");
 
-    velocidadMotor = 2.0f;
-    torqueMotor = 100.0f;
+    velocidadMotor = 1.5f;
+    torqueMotor = 35.0f;
 
     if (izquierdo)
     {
@@ -31,22 +31,29 @@ BrazoGarra::BrazoGarra(b2World& world, b2Body* garraBaseBody, bool ladoIzquierdo
         offsetX = 1.0f;
     }
 
-    //body
+    //ubicacion del sprite
     b2BodyDef brazoDef;
 
     brazoDef.type = b2_dynamicBody;   //DINAMICO
-    brazoDef.position.Set(basePos.x + offsetX, basePos.y + 1.60f);
+    brazoDef.position.Set(basePos.x + offsetX, basePos.y + 1.55f);
 
     brazoBody = world.CreateBody(&brazoDef);
 
     b2PolygonShape brazoShape;
-    brazoShape.SetAsBox(0.06f,0.45f);
+
+    //posicion del collider respecto al body
+    brazoShape.SetAsBox(
+        0.08f,
+        0.40f,
+        b2Vec2(0.0f, 0.10f),
+        0.0f
+    );
 
 
     b2FixtureDef brazoFixture;
     brazoFixture.shape = &brazoShape;
     brazoFixture.density = 1.0f;
-    brazoFixture.friction = 2.0f;   //para que pueda "agarrar" cosas
+    brazoFixture.friction = 2.0f;   //mas friccion para que pueda "agarrar" cosas
     brazoFixture.restitution = 0.0f;
 
     //fixture
@@ -57,7 +64,7 @@ BrazoGarra::BrazoGarra(b2World& world, b2Body* garraBaseBody, bool ladoIzquierdo
 
     //anchor - punto de bisagra
     b2Vec2 anchor;
-    anchor.Set(basePos.x + offsetX, basePos.y + 0.65f);
+    anchor.Set(basePos.x + offsetX, basePos.y + 0.60f);
 
     //iinit joint entre garraBase y brazo
     jointDef.Initialize(garraBaseBody,brazoBody,anchor);
@@ -143,6 +150,40 @@ void BrazoGarra::Draw()
             5.0f,
             BLUE
         );
+
+        b2Fixture* fixture = brazoBody->GetFixtureList();
+
+        if (fixture)
+        {
+            b2PolygonShape* poly =
+                (b2PolygonShape*)fixture->GetShape();
+
+            Vector2 points[b2_maxPolygonVertices];
+
+            for (int i = 0; i < poly->m_count; i++)
+            {
+                b2Vec2 worldPoint =
+                    brazoBody->GetWorldPoint(poly->m_vertices[i]);
+
+                points[i] = {
+                    worldPoint.x * SCALE,
+                    worldPoint.y * SCALE
+                };
+            }
+
+            // dibujar líneas del collider
+            for (int i = 0; i < poly->m_count; i++)
+            {
+                int next = (i + 1) % poly->m_count;
+
+                DrawLineEx(
+                    points[i],
+                    points[next],
+                    2.0f,
+                    YELLOW
+                );
+            }
+        }
     }
 
 }

@@ -18,7 +18,7 @@ GarraBase::GarraBase(b2World& world,Motor& motor)
 
     b2BodyDef clawDef;
 
-    clawDef.type = b2_kinematicBody;    //cambiar a dynamic
+    clawDef.type = b2_dynamicBody;;    //cambiar a dynamic
     clawDef.position.Set(motorPos.x, motorPos.y + (cableLength / SCALE));
     clawDef.fixedRotation = true;
 
@@ -38,7 +38,7 @@ GarraBase::GarraBase(b2World& world,Motor& motor)
     clawFixture.restitution = 0.1f;
 
     clawBody->CreateFixture(&clawFixture);
-
+    clawBody->SetGravityScale(0.0f);
     //creacion de brazos izq y der
 
     brazoIzq = new BrazoGarra(
@@ -119,9 +119,9 @@ void GarraBase::Draw()
     //angulo garra
     float clawAngle = clawBody->GetAngle() * RAD2DEG;
 
-    //cable
+    //render cable
     DrawLineEx(
-        {motorX, motorY + 20},
+        {motorX, motorY + 12},
         {clawX, clawY - 20},
         4.0f, DARKGRAY
     );
