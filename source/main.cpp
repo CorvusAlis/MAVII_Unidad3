@@ -8,6 +8,8 @@
 #include <vector>
 
 #include "Motor.h"
+#include "GarraBase.h"
+
 
 using namespace std;
 
@@ -51,6 +53,7 @@ int main(void)
     groundBody->CreateFixture(&groundShape, 0.0f);
 
     Motor motor(world);
+    GarraBase garraBase(world, motor);
 
     /*
     b2Body = objeto lógico (como una entidad)
@@ -63,6 +66,7 @@ int main(void)
 
         //UPDATE - input+logica
         motor.Update();
+        garraBase.Update();
 
         //SIMULACION - fisica
         // Avanzar simulación - sincronizado con el juego a 60fps (definido mas arriba)
@@ -76,6 +80,7 @@ int main(void)
         // Suelo visual - rectangulo que no tiene fisicas, es solo una imagen
         DrawRectangle(0, screenHeight - 60, screenWidth, 40, sueloColor);
         motor.Draw();
+        garraBase.Draw();
 
         EndDrawing();
     }
