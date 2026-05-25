@@ -6,7 +6,11 @@ GarraBase::GarraBase(b2World& world,Motor& motor)
 {
     clawTexture = LoadTexture("assets/garra_superior_cm.png");
 
+    //cable
     cableLength = 120.0f;
+    cableSpeed = 220.0f;
+    minCableLength = 60.0f;
+    maxCableLength = 350.0f;
 
     b2Vec2 motorPos = motor.GetBody()->GetPosition();
 
@@ -53,17 +57,51 @@ GarraBase::GarraBase(b2World& world,Motor& motor)
 
 GarraBase::~GarraBase() {
     UnloadTexture(clawTexture);
+
+    //destruir los brazos attacheados
+    delete brazoDer;
+    delete brazoIzq;
+
 }
 
 void GarraBase::Update()
 {
     b2Vec2 motorPos = motor.GetBody()->GetPosition();
-
+    b2Vec2 clawPos = clawBody->GetPosition();
     b2Vec2 targetPos;
 
-    targetPos.Set(motorPos.x,motorPos.y + (cableLength / SCALE));
+    targetPos.Set( motorPos.x,motorPos.y + (cableLength / SCALE));
 
-    clawBody->SetTransform(targetPos,0.0f);    //actualizar para joints con brazos moviles
+    //control del cable
+    if (IsKeyDown(KEY_S))
+    {
+        cableLength += cableSpeed * GetFrameTime();
+    }
+
+    if (IsKeyDown(KEY_W))
+    {
+        cableLength -= cableSpeed * GetFrameTime();
+    }
+
+    if (cableLength < minCableLength)
+    {
+        cableLength = minCableLength;
+    }
+
+    if (cableLength > maxCableLength)
+    {
+        cableLength = maxCableLength;
+    }
+
+    b2Vec2 velocity;
+    velocity.Set((targetPos.x - clawPos.x) * 10.0f,(targetPos.y - clawPos.y) * 10.0f);
+
+    clawBody->SetLinearVelocity(velocity);  //ya no con el transform
+
+    bool cerrar = IsKeyDown(KEY_SPACE); //para cerrar ambos brazos
+
+    brazoIzq->Update(cerrar);
+    brazoDer->Update(cerrar);
 }
 
 void GarraBase::Draw()
@@ -83,16 +121,9 @@ void GarraBase::Draw()
 
     //cable
     DrawLineEx(
-        {
-            motorX,
-            motorY + 20
-        },
-        {
-            clawX,
-            clawY - 20
-        },
-        4.0f,
-        DARKGRAY
+        {motorX, motorY + 20},
+        {clawX, clawY - 20},
+        4.0f, DARKGRAY
     );
 
     //garra
@@ -104,10 +135,8 @@ void GarraBase::Draw()
     };
 
     Rectangle dest = {
-        clawX,
-        clawY,
-        (float)clawTexture.width,
-        (float)clawTexture.height
+        clawX, clawY,
+        (float)clawTexture.width, (float)clawTexture.height
     };
 
     Vector2 origin = {
@@ -123,6 +152,10 @@ void GarraBase::Draw()
         clawAngle,
         WHITE
     );
+
+    //redner de brazos
+    brazoIzq->Draw();
+    brazoDer->Draw();
     
     if(DEBUG_MODE){
         //centro garra
@@ -131,8 +164,5 @@ void GarraBase::Draw()
         //anchors
         DrawCircleV({motorX,motorY + 20},4.0f,BLUE);
         DrawCircleV({clawX,clawY - 20},4.0f,GREEN);
-
-        //collider
-        DrawRectangleLines(clawX - 27,clawY - 13,54,26,ORANGE);
     }
 }

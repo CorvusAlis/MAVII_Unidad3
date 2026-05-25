@@ -174,28 +174,6 @@ void Motor::Draw()
         motorAngle,
         WHITE
     );
-
-    //DEBUG - cambiar bool en Constantes.h
-    if(DEBUG_MODE){
-        b2Vec2 anchorA = prismaticJoint->GetAnchorA();  //joint rail
-        b2Vec2 anchorB = prismaticJoint->GetAnchorB();  //joint motor
-        DrawCircleV(
-            {
-                anchorA.x * SCALE,
-                anchorA.y * SCALE
-            },
-            6.0f,
-            RED
-        );
-        DrawCircleV(
-            {
-                anchorB.x * SCALE,
-                anchorB.y * SCALE
-            },
-            6.0f,
-            GREEN
-        );
-    }
 }
 
 b2Body* Motor::GetBody() const

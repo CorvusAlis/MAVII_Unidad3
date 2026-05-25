@@ -66,7 +66,7 @@ int main(void)
 
         //UPDATE - input+logica
         motor.Update();
-        garraBase.Update();
+        garraBase.Update(); //se hacen los updates de los brazos
 
         //SIMULACION - fisica
         // Avanzar simulación - sincronizado con el juego a 60fps (definido mas arriba)
@@ -80,7 +80,7 @@ int main(void)
         // Suelo visual - rectangulo que no tiene fisicas, es solo una imagen
         DrawRectangle(0, screenHeight - 60, screenWidth, 40, sueloColor);
         motor.Draw();
-        garraBase.Draw();
+        garraBase.Draw();   //se hacen los draw de los brazos
 
         EndDrawing();
     }
