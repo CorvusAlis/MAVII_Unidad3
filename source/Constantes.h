@@ -6,4 +6,4 @@
 
 const float SCALE = 30.0f;
 
-const bool DEBUG_MODE = false;
+const bool DEBUG_MODE = true;

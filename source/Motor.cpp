@@ -40,7 +40,7 @@ Motor::Motor(b2World& world)
     b2PolygonShape motorShape;
 
     motorShape.SetAsBox(
-        0.7f,
+       15.0f,
         0.4f
     );
 
@@ -66,8 +66,8 @@ Motor::Motor(b2World& world)
     //limites para el movimiento del motor
 
     jointDef.enableLimit = true;
-    jointDef.lowerTranslation = -8.0f;
-    jointDef.upperTranslation = 8.0f;
+    jointDef.lowerTranslation = -14.0f;
+    jointDef.upperTranslation = 14.0f;
 
     jointDef.enableMotor = true;
     jointDef.maxMotorForce = 1000.0f;
@@ -110,6 +110,7 @@ void Motor::Draw()
     float railX = railPos.x * SCALE;
     float railY = railPos.y * SCALE;
 
+    //uso todo el sprite desde 0,0 esquina superior izqueirda
     Rectangle railSource = {
         0,
         0,
@@ -117,15 +118,18 @@ void Motor::Draw()
         (float)railTexture.height
     };
 
+    //tamaño final del renderizado
     Rectangle railDest = {
         railX,
         railY,
-        (float)railTexture.width,
+        900.0f,
+        //(float)railTexture.width,
         (float)railTexture.height
     };
 
     Vector2 railOrigin = {
-        railTexture.width / 2.0f,
+        //railTexture.width / 2.0f,
+        900.0f / 2,
         railTexture.height / 2.0f
     };
 

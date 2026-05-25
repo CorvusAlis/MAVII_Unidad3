@@ -9,7 +9,7 @@
 
 #include "Motor.h"
 #include "GarraBase.h"
-
+#include "Caja.h"
 
 using namespace std;
 
@@ -22,19 +22,13 @@ int main(void)
     InitWindow(screenWidth, screenHeight, "Juego de Garra!");
     SetTargetFPS(60);
 
-    //bg
-    Color fondo = { 110, 100, 215, 255 };
-    Color textoPrincipal = RAYWHITE;
-    Color textoSecundario = DARKPURPLE;
-    Color sueloColor = Fade(DARKGREEN, 0.7f);
+    Texture2D background = LoadTexture("assets/fondo_cm.png");
 
-    // Mundo físico - todo se crea DIVIDIENDO el tamaño por scale
+    //Mundo físico - todo se crea DIVIDIENDO el tamaño por scale
     b2Vec2 gravity(0.0f, 9.8f);
     b2World world(gravity);
 
-    // -----------------------------
-    // Suelo estático - marca el espacio con el que los elementos interactuan != del suelo visual
-    // -----------------------------
+    //Suelo estático - marca el espacio con el que los elementos interactuan != del suelo visual
     b2BodyDef groundDef;
     groundDef.type = b2_staticBody;
     groundDef.position.Set(
@@ -55,11 +49,39 @@ int main(void)
     Motor motor(world);
     GarraBase garraBase(world, motor);
 
-    /*
-    b2Body = objeto lógico (como una entidad)
-    b2Shape = la geometría de esa parte
-    b2Fixture = “parte física tangible”
-    */
+    vector<Caja*> cajas;
+
+    #pragma region cajas
+        cajas.push_back(
+            new Caja(
+                world,
+                350, 500,
+                40, 40,
+                RED,
+                0.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                450, 500,
+                40, 40,
+                BLUE,
+                12.0f
+            )
+        );
+
+        cajas.push_back(
+            new Caja(
+                world,
+                550, 500,
+                40, 40,
+                GREEN,
+                -8.0f
+            )
+        );
+#pragma endregion
 
     while (!WindowShouldClose())
     {
@@ -75,16 +97,49 @@ int main(void)
 
         //DRAW - render
         BeginDrawing();
-        ClearBackground(fondo);
+        ClearBackground(BLACK);
+        #pragma region background
+        Rectangle source = {
+            0,
+            0,
+            (float)background.width,
+            (float)background.height
+        };
 
-        // Suelo visual - rectangulo que no tiene fisicas, es solo una imagen
-        DrawRectangle(0, screenHeight - 60, screenWidth, 40, sueloColor);
+        Rectangle dest = {
+            0,
+            0,
+            (float)screenWidth,
+            (float)screenHeight
+        };
+
+        DrawTexturePro(
+            background,
+            source,
+            dest,
+            { 0,0 },
+            0.0f,
+            WHITE
+        );
+#pragma endregion
+
+        for (auto caja : cajas)
+        {
+            caja->Draw();
+        }
+
         motor.Draw();
         garraBase.Draw();   //se hacen los draw de los brazos
 
         EndDrawing();
     }
 
+    UnloadTexture(background);
+    for (auto caja : cajas)
+    {
+        delete caja;
+    }
     CloseWindow();
+
     return 0;
 }

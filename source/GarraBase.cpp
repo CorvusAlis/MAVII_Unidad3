@@ -10,7 +10,7 @@ GarraBase::GarraBase(b2World& world,Motor& motor)
     cableLength = 120.0f;
     cableSpeed = 220.0f;
     minCableLength = 60.0f;
-    maxCableLength = 350.0f;
+    maxCableLength = 400.0f;
 
     b2Vec2 motorPos = motor.GetBody()->GetPosition();
 

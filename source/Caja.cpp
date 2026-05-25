@@ -18,9 +18,9 @@ Caja::Caja(b2World& world, float x, float y, float w, float h, Color c, float an
 
     b2FixtureDef fixture;
     fixture.shape = &shape;
-    fixture.density = 1.0f;
-    fixture.friction = 0.4f;
-    fixture.restitution = 0.2f;
+    fixture.density = 0.5f; //menos peso
+    fixture.friction = 1.2f;    //mas friccion
+    fixture.restitution = 0.0f;
 
     body->CreateFixture(&fixture);
 }

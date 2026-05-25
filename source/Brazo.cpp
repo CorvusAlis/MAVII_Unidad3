@@ -7,7 +7,7 @@ BrazoGarra::BrazoGarra(b2World& world, b2Body* garraBaseBody, bool ladoIzquierdo
     brazoTexture = LoadTexture("assets/brazo_cm.png");
 
     velocidadMotor = 2.0f;
-    torqueMotor = 40.0f;
+    torqueMotor = 100.0f;
 
     if (izquierdo)
     {
@@ -40,14 +40,14 @@ BrazoGarra::BrazoGarra(b2World& world, b2Body* garraBaseBody, bool ladoIzquierdo
     brazoBody = world.CreateBody(&brazoDef);
 
     b2PolygonShape brazoShape;
-    brazoShape.SetAsBox(0.15f,0.7f);
+    brazoShape.SetAsBox(0.06f,0.45f);
 
 
     b2FixtureDef brazoFixture;
     brazoFixture.shape = &brazoShape;
     brazoFixture.density = 1.0f;
-    brazoFixture.friction = 0.7f;   //para que pueda "agarrar" cosas
-    brazoFixture.restitution = 0.1f;
+    brazoFixture.friction = 2.0f;   //para que pueda "agarrar" cosas
+    brazoFixture.restitution = 0.0f;
 
     //fixture
     brazoBody->CreateFixture(&brazoFixture);
