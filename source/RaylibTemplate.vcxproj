@@ -156,7 +156,9 @@ xcopy "$(SolutionDir)..\lib\vld\64-bit\Microsoft.DTfW.DHL.manifest" "$(OutDir)" 
   <ItemGroup>
     <ClCompile Include="Brazo.cpp" />
     <ClCompile Include="Caja.cpp" />
+    <ClCompile Include="Constantes.cpp" />
     <ClCompile Include="Constantes.h" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GarraBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Motor.cpp" />
@@ -164,6 +166,7 @@ xcopy "$(SolutionDir)..\lib\vld\64-bit\Microsoft.DTfW.DHL.manifest" "$(OutDir)" 
   <ItemGroup>
     <ClInclude Include="Brazo.h" />
     <ClInclude Include="Caja.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GarraBase.h" />
     <ClInclude Include="Motor.h" />
   </ItemGroup>

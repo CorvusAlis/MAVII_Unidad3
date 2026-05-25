@@ -1,9 +1,9 @@
 #pragma once
 
-//escala para convertir pixeles/metros
-//metros a píxeles : *SCALE
-//píxeles a metros : / SCALE
+extern const float SCALE;
 
-const float SCALE = 30.0f;
+extern const int SCREENWIDTH;
+extern const int SCREENHEIGHT;
 
-const bool DEBUG_MODE = false;
+extern const bool DEBUG_MODE;
+
