@@ -39,6 +39,12 @@
     <ClCompile Include="Constantes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ZonaEntrega.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Esfera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Caja.h">
@@ -54,6 +60,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZonaEntrega.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Esfera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

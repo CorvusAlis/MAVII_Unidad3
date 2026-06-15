@@ -5,69 +5,25 @@ GameManager::GameManager()
 {
     background = LoadTexture("assets/fondo_cm.png");
 
-    world = new b2World(
-        b2Vec2(0.0f, 9.8f)  //gravedad del mundo
-    );
+    world = new b2World(b2Vec2(0.0f, 9.8f));
    
     CreateGround();
 
     motor = new Motor(*world);
-
     garraBase = new GarraBase(*world, *motor);
+    CreatePremios();
 
-    CreateCajas();
-}
-
-void GameManager::Update()
-{
-    motor->Update();
-
-    garraBase->Update();
-
-    world->Step(1.0f / 60.0f,8, 3);
-}
-
-void GameManager::Draw()
-{
-    BeginDrawing();
-
-    ClearBackground(BLACK);
-
-    //fondo
-    Rectangle source = {
-        0,
-        0,
-        (float)background.width,
-        (float)background.height
-    };
-
-    Rectangle dest = {
-        0,
-        0,
-        1000,
-        600
-    };
-
-    DrawTexturePro(
-        background,
-        source,
-        dest,
-        { 0,0 },
-        0.0f,
-        WHITE
+    zonaEntrega = new ZonaEntrega(
+        800.0f,   // x
+        400.0f,   // y
+        85.0f,   // ancho
+        100.0f    // alto
     );
 
-    //dibujo cajas
-    for (auto caja : cajas)
-    {
-        caja->Draw();
-    }
+    scoreTotal = 0;
+    tiempoRestante = 60.0f;
 
-    motor->Draw();
-
-    garraBase->Draw();
-
-    EndDrawing();
+    gameOver = false;
 }
 
 GameManager::~GameManager()
@@ -77,123 +33,139 @@ GameManager::~GameManager()
         delete caja;
     }
 
+    for (auto esfera : esferas)
+    {
+        delete esfera;
+    }
+
     delete garraBase;
     delete motor;
-
+    delete zonaEntrega;
     delete world;
 
     UnloadTexture(background);
 }
 
-void GameManager::CreateCajas()
+void GameManager::Update()
+{
+    if (gameOver)
+    {
+        if (IsKeyPressed(KEY_R))
+        {
+            ResetGame();
+        }
+
+        return;
+    }
+
+    tiempoRestante -= GetFrameTime();
+
+    if (tiempoRestante <= 0.0f)
+    {
+        tiempoRestante = 0.0f;
+        gameOver = true;
+        return;
+    }
+
+    motor->Update();
+    garraBase->Update();
+
+    //primero actualizo la fisica, luego veo si algun objeto entro en la zona
+    world->Step(1.0f / 60.0f, 8, 3);
+
+    CheckDeliveries();
+}
+
+void GameManager::Draw()
+{
+    BeginDrawing();
+
+    //fondo
+    ClearBackground(BLACK);
+
+    DibujarFondo();
+
+    DibujarUI();
+
+    //dibujo zona entrega
+    zonaEntrega->Draw();
+
+    //dibujo premios
+    for (auto caja : cajas)
+    {
+        caja->Draw();
+    }
+
+    for (auto esfera : esferas)
+    {
+        esfera->Draw();
+    }
+
+    motor->Draw();
+    garraBase->Draw();
+
+    if (gameOver)
+    {
+        DibujarUIGameOver();
+    }
+
+    EndDrawing();
+}
+
+void GameManager::CreatePremios()
 {
     cajas.push_back(
         new Caja(
             *world,
             350, 450,
-            40, 40,
-            RED,
-            0.0f
+            50, 50,
+            GREEN,
+            0,
+            100
         )
     );
 
     cajas.push_back(
         new Caja(
             *world,
-            450, 450,
+            500, 450,
             40, 40,
             BLUE,
-            0.0f
+            0,
+            250
         )
     );
 
     cajas.push_back(
         new Caja(
             *world,
-            550, 450,
+            560, 450,
             40, 40,
-            GREEN,
-            0.0f
+            BLUE,
+            0,
+            250
         )
     );
 
     cajas.push_back(
         new Caja(
             *world,
-            280, 450,
-            40, 40,
-            ORANGE,
-            -10.0f
+            650, 450,
+            30, 30,
+            RED,
+            0,
+            500
         )
     );
 
-    cajas.push_back(
-        new Caja(
+    esferas.push_back(
+        new Esfera(
             *world,
-            340, 470,
-            50, 50,
-            PURPLE,
-            15.0f
-        )
-    );
-
-    cajas.push_back(
-        new Caja(
-            *world,
-            410, 455,
-            35, 35,
+            520,
+            450,
+            15,
             GOLD,
-            -20.0f
-        )
-    );
-
-    cajas.push_back(
-        new Caja(
-            *world,
-            480, 490,
-            60, 40,
-            PINK,
-            8.0f
-        )
-    );
-
-    cajas.push_back(
-        new Caja(
-            *world,
-            560, 460,
-            45, 45,
-            SKYBLUE,
-            -5.0f
-        )
-    );
-
-    cajas.push_back(
-        new Caja(
-            *world,
-            630, 500,
-            40, 60,
-            LIME,
-            25.0f
-        )
-    );
-
-    cajas.push_back(
-        new Caja(
-            *world,
-            700, 450,
-            55, 35,
-            MAROON,
-            -12.0f
-        )
-    );
-
-    cajas.push_back(
-        new Caja(
-            *world,
-            770, 480,
-            40, 40,
-            DARKBLUE,
-            18.0f
+            1000
         )
     );
 }
@@ -216,4 +188,150 @@ void GameManager::CreateGround() {
     groundBody= world->CreateBody(&groundDef);
 
     groundBody->CreateFixture(&groundShape, 0.0f);
+}
+
+//para detectar la entrega de un premio a la zona de entrega
+void GameManager::CheckDeliveries()
+{
+    for (auto it = cajas.begin();
+        it != cajas.end();)
+    {
+        if (zonaEntrega->Contiene((*it)->GetBody()))
+        {
+            scoreTotal += (*it)->GetPuntos();
+
+            delete* it;
+
+            it = cajas.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    for (auto it = esferas.begin();
+        it != esferas.end();)
+    {
+        if (zonaEntrega->Contiene((*it)->GetBody()))
+        {
+            scoreTotal += (*it)->GetPuntos();
+
+            delete* it;
+
+            it = esferas.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+}
+
+//reseteo toda la escena y creo de nuevo
+void GameManager::ResetGame()
+{
+    scoreTotal = 0;
+
+    tiempoRestante = 60.0f;
+
+    gameOver = false; //reseteo bool de gameover NO OLVIDAR
+
+    //borrar cajas
+    for (auto caja : cajas)
+    {
+        delete caja;
+    }
+
+    cajas.clear();
+
+    //borrar esferas
+    for (auto esfera : esferas)
+    {
+        delete esfera;
+    }
+
+    esferas.clear();
+
+    //recrear premios
+    CreatePremios();
+}
+
+void GameManager::DibujarFondo() {
+    Rectangle source = {
+        0,
+        0,
+        (float)background.width,
+        (float)background.height
+    };
+
+    Rectangle dest = {
+        0,
+        0,
+        1000,
+        600
+    };
+
+    DrawTexturePro(
+        background,
+        source,
+        dest,
+        { 0,0 },
+        0.0f,
+        WHITE
+    );
+}
+
+void GameManager::DibujarUI(){
+    //timer
+    DrawText(
+        TextFormat("TIEMPO: %d", (int)tiempoRestante),
+        425,
+        15,
+        30,
+        WHITE
+    );
+
+    //puntos
+    DrawText(
+        TextFormat("PUNTOS: %d", scoreTotal),
+        50,
+        15,
+        30,
+        WHITE
+    );
+}
+
+void GameManager::DibujarUIGameOver() {
+    DrawRectangle(
+        0,
+        0,
+        SCREENWIDTH,
+        SCREENHEIGHT,
+        Fade(BLACK, 0.7f)
+    );
+
+    DrawText(
+        "TIEMPO AGOTADO",
+        SCREENWIDTH / 2 - 180,
+        SCREENHEIGHT / 2 - 60,
+        40,
+        RED
+    );
+
+    DrawText(
+        TextFormat("PUNTAJE FINAL: %d", scoreTotal),
+        SCREENWIDTH / 2 - 180,
+        SCREENHEIGHT / 2,
+        30,
+        GOLD
+    );
+
+    DrawText(
+        "Presione R para reiniciar",
+        SCREENWIDTH / 2 - 170,
+        SCREENHEIGHT / 2 + 60,
+        25,
+        WHITE
+    );
 }

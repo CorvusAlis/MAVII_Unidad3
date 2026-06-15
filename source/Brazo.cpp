@@ -53,7 +53,7 @@ BrazoGarra::BrazoGarra(b2World& world, b2Body* garraBaseBody, bool ladoIzquierdo
     b2FixtureDef brazoFixture;
     brazoFixture.shape = &brazoShape;
     brazoFixture.density = 1.0f;
-    brazoFixture.friction = 2.0f;   //mas friccion para que pueda "agarrar" cosas
+    brazoFixture.friction = 1.8f;   //mas friccion para que pueda "agarrar" cosas
     brazoFixture.restitution = 0.0f;
 
     //fixture

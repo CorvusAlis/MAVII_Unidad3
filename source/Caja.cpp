@@ -2,8 +2,8 @@
 #include "Constantes.h"
 
 //constructor
-Caja::Caja(b2World& world, float x, float y, float w, float h, Color c, float angleDeg)
-    : width(w), height(h), color(c)
+Caja::Caja(b2World& world, float x, float y, float w, float h, Color c, float angleDeg, int puntos)
+    : width(w), height(h), color(c), puntos(puntos)
 {
     b2BodyDef def;
     def.type = b2_dynamicBody;
@@ -23,6 +23,15 @@ Caja::Caja(b2World& world, float x, float y, float w, float h, Color c, float an
     fixture.restitution = 0.0f;
 
     body->CreateFixture(&fixture);
+}
+
+Caja::~Caja()
+{
+    if (body)
+    {
+        body->GetWorld()->DestroyBody(body);
+        body = nullptr;
+    }
 }
 
 void Caja::Draw()
@@ -86,4 +95,14 @@ void Caja::Draw()
             YELLOW
         );
     }
+}
+
+b2Body* Caja::GetBody() const
+{
+    return body;
+}
+
+int Caja::GetPuntos() const
+{
+    return puntos;
 }

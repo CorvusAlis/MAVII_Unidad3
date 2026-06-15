@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "raylib.h"
 #include <box2d.h>
 #include <string>
@@ -17,8 +16,14 @@ private:
     float height;
     Color color;
 
+    int puntos;
+
 public:
-    Caja(b2World& world, float x, float y, float w, float h, Color c, float angleDeg);
+    Caja(b2World& world, float x, float y, float w, float h, Color c, float angleDeg, int puntos);
+    ~Caja();
+
+    b2Body* GetBody() const;
+    int GetPuntos() const;
 
     void Draw();
 };
