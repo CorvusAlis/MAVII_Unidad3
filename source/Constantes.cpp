@@ -10,4 +10,4 @@ const int SCREENHEIGHT = 600;
 
 const float WALL_THICKNESS = 5.0f;
 
-const bool DEBUG_MODE = true;
+const bool DEBUG_MODE = false;
