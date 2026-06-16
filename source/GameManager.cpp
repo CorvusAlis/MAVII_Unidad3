@@ -7,7 +7,7 @@ GameManager::GameManager()
 
     world = new b2World(b2Vec2(0.0f, 9.8f));
    
-    CreateGround();
+    CreateBoundaries();
 
     motor = new Motor(*world);
     garraBase = new GarraBase(*world, *motor);
@@ -170,7 +170,7 @@ void GameManager::CreatePremios()
     );
 }
 
-void GameManager::CreateGround() {
+void GameManager::CreateBoundaries() {
     //Suelo estático - marca el espacio con el que los elementos interactuan != del suelo visual
     b2BodyDef groundDef;
     groundDef.type = b2_staticBody;
@@ -188,6 +188,54 @@ void GameManager::CreateGround() {
     groundBody= world->CreateBody(&groundDef);
 
     groundBody->CreateFixture(&groundShape, 0.0f);
+
+    //pared izqueirda
+    b2BodyDef leftWallDef;
+    leftWallDef.type = b2_staticBody;
+
+    leftWallDef.position.Set(
+        50.0f / SCALE,
+        (SCREENHEIGHT / 2.0f) / SCALE
+    );
+
+    b2Body* leftWall =
+        world->CreateBody(&leftWallDef);
+
+    b2PolygonShape leftWallShape;
+
+    leftWallShape.SetAsBox(
+        WALL_THICKNESS / SCALE,
+        (SCREENHEIGHT / 2.0f) / SCALE
+    );
+
+    leftWall->CreateFixture(
+        &leftWallShape,
+        0.0f
+    );
+
+    //pared derecha
+    b2BodyDef rightWallDef;
+    rightWallDef.type = b2_staticBody;
+
+    rightWallDef.position.Set(
+        (SCREENWIDTH - 50.0f)/ SCALE,
+        (SCREENHEIGHT / 2.0f) / SCALE
+    );
+
+    b2Body* rightWall =
+        world->CreateBody(&rightWallDef);
+
+    b2PolygonShape rightWallShape;
+
+    rightWallShape.SetAsBox(
+        WALL_THICKNESS / SCALE,
+        (SCREENHEIGHT / 2.0f) / SCALE
+    );
+
+    rightWall->CreateFixture(
+        &rightWallShape,
+        0.0f
+    );
 }
 
 //para detectar la entrega de un premio a la zona de entrega

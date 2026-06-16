@@ -49,7 +49,7 @@ public:
 
     void CheckDeliveries();
 
-    void CreateGround();
+    void CreateBoundaries();
     void CreatePremios();
 
     void ResetGame();

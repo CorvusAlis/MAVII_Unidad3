@@ -40,8 +40,8 @@ Motor::Motor(b2World& world)
     b2PolygonShape motorShape;
 
     motorShape.SetAsBox(
-       15.0f,
-        0.4f
+        15.0f / SCALE,
+        12.0f / SCALE
     );
 
     b2FixtureDef motorFixture;
