@@ -1,17 +1,15 @@
 #include "Esfera.h"
 #include "Constantes.h"
 
-Esfera::Esfera(
-    b2World& world,
-    float x,
-    float y,
-    float radius,
-    Color color,
-    int puntos)
+using namespace std;
+
+Esfera::Esfera(b2World& world, const string& rutaTextura, float x, float y, float radius, Color color, int puntos)
     : radius(radius),
     color(color),
     puntos(puntos)
 {
+    esferaTexture = LoadTexture(rutaTextura.c_str());
+
     b2BodyDef def;
 
     def.type = b2_dynamicBody;

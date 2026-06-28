@@ -2,10 +2,14 @@
 #include "Constantes.h"
 #include "GameObjectType.h"
 
+using namespace std;
+
 //constructor
-Caja::Caja(b2World& world, float x, float y, float w, float h, Color c, float angleDeg, int puntos)
+Caja::Caja(b2World& world, const string& rutaTextura, float x, float y, float w, float h, Color c, float angleDeg, int puntos)
     : width(w), height(h), color(c), puntos(puntos)
 {
+    cajaTexture = LoadTexture(rutaTextura.c_str());
+
     b2BodyDef def;
     def.type = b2_dynamicBody;
     def.position.Set(x / SCALE, y / SCALE);

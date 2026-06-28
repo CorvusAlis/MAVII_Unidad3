@@ -16,11 +16,12 @@ private:
     float width;
     float height;
     Color color;
+    Texture2D cajaTexture;
 
     int puntos;
 
 public:
-    Caja(b2World& world, float x, float y, float w, float h, Color c, float angleDeg, int puntos);
+    Caja(b2World& world, const string& rutaTextura, float x, float y, float w, float h, Color c, float angleDeg, int puntos);
     ~Caja();
 
     void Draw();

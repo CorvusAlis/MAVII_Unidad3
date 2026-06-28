@@ -118,6 +118,7 @@ void GameManager::CreatePremios()
     cajas.push_back(
         new Caja(
             *world,
+            "assets/gema1.png",
             350, 450,
             50, 50,
             GREEN,
@@ -129,6 +130,7 @@ void GameManager::CreatePremios()
     cajas.push_back(
         new Caja(
             *world,
+            "assets/gema3.png",
             500, 450,
             40, 40,
             BLUE,
@@ -140,6 +142,7 @@ void GameManager::CreatePremios()
     cajas.push_back(
         new Caja(
             *world,
+            "assets/gema3.png",
             560, 450,
             40, 40,
             BLUE,
@@ -151,6 +154,7 @@ void GameManager::CreatePremios()
     cajas.push_back(
         new Caja(
             *world,
+            "assets/gema2.png",
             650, 450,
             30, 30,
             RED,
@@ -162,6 +166,7 @@ void GameManager::CreatePremios()
     esferas.push_back(
         new Esfera(
             *world,
+            "assets/gema4.png",
             520,
             450,
             15,
