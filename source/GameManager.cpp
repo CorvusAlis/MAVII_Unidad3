@@ -14,8 +14,9 @@ GameManager::GameManager()
     CreatePremios();
 
     zonaEntrega = new ZonaEntrega(
-        800.0f,   // x
-        400.0f,   // y
+        *world,
+        800.0f,   // posx
+        400.0f,   // posy
         85.0f,   // ancho
         100.0f    // alto
     );

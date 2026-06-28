@@ -9,11 +9,17 @@ private:
 
     Rectangle area;
 
+    b2Body* body; //ahora tiene un cuerpo que va a ser el sensor
+
 public:
 
-    ZonaEntrega(float x, float y, float width, float height);
+    ZonaEntrega(b2World& world, float x, float y, float width, float height);
+    ~ZonaEntrega();
 
-    bool Contiene(b2Body* body);    //para  que reciba cualquier tipo de cuerpo, no solo cajas
+    //ya no uso metodo Contiene, uso isSensor
+    //bool Contiene(b2Body* body);    //para  que reciba cualquier tipo de cuerpo, no solo cajas
 
     void Draw();
+
+    b2Body* GetBody() const;
 };
