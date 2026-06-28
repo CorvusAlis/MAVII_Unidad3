@@ -60,3 +60,8 @@ b2Body* ZonaEntrega::GetBody() const
 {
     return body;
 }
+
+GameObjectType ZonaEntrega::GetType() const
+{
+    return GameObjectType::ZonaEntrega;
+}

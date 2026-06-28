@@ -1,5 +1,6 @@
 #include "Caja.h"
 #include "Constantes.h"
+#include "GameObjectType.h"
 
 //constructor
 Caja::Caja(b2World& world, float x, float y, float w, float h, Color c, float angleDeg, int puntos)
@@ -23,6 +24,9 @@ Caja::Caja(b2World& world, float x, float y, float w, float h, Color c, float an
     fixture.restitution = 0.0f;
 
     body->CreateFixture(&fixture);
+
+    //agrego un tag/etiqueta al body del objeto
+    body->GetUserData().pointer =reinterpret_cast<uintptr_t>(this);
 }
 
 Caja::~Caja()
@@ -105,4 +109,9 @@ b2Body* Caja::GetBody() const
 int Caja::GetPuntos() const
 {
     return puntos;
+}
+
+GameObjectType Caja::GetType() const
+{
+    return GameObjectType::Caja;
 }

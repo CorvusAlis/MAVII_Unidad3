@@ -87,3 +87,8 @@ int Esfera::GetPuntos() const
 {
     return puntos;
 }
+
+GameObjectType Esfera::GetType() const
+{
+    return GameObjectType::Esfera;
+}
