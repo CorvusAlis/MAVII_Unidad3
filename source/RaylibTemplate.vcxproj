@@ -159,6 +159,7 @@ xcopy "$(SolutionDir)..\lib\vld\64-bit\Microsoft.DTfW.DHL.manifest" "$(OutDir)" 
     <ClCompile Include="Constantes.cpp" />
     <ClCompile Include="Constantes.h" />
     <ClCompile Include="Esfera.cpp" />
+    <ClCompile Include="GameContactListener.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GarraBase.cpp" />
     <ClCompile Include="main.cpp" />
@@ -169,9 +170,12 @@ xcopy "$(SolutionDir)..\lib\vld\64-bit\Microsoft.DTfW.DHL.manifest" "$(OutDir)" 
     <ClInclude Include="Brazo.h" />
     <ClInclude Include="Caja.h" />
     <ClInclude Include="Esfera.h" />
+    <ClInclude Include="GameContactListener.h" />
     <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="GarraBase.h" />
     <ClInclude Include="Motor.h" />
+    <ClInclude Include="GameObjectType.h" />
     <ClInclude Include="ZonaEntrega.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
