@@ -31,6 +31,9 @@ Esfera::Esfera(b2World& world, const string& rutaTextura, float x, float y, floa
     fixture.restitution = 0.2f;
 
     body->CreateFixture(&fixture);
+
+    //MUY IMPORTANTE es lo que al final sirve para detectar que los objetos hacen contacto, devuelve el objeto que se reconoce en GameContactListener
+    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 }
 
 Esfera::~Esfera()

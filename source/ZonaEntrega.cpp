@@ -36,6 +36,8 @@ ZonaEntrega::ZonaEntrega(
     fixture.isSensor = true;
 
     body->CreateFixture(&fixture);
+
+    body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
 }
 
 ZonaEntrega::~ZonaEntrega() {

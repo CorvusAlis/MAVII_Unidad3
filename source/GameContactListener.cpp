@@ -12,7 +12,7 @@ void GameContactListener::BeginContact(b2Contact* contact)
     b2Body* bodyA = fixtureA->GetBody();
     b2Body* bodyB = fixtureB->GetBody();
 
-    //obtengo puntero al objeto real que contacta
+    //obtengo puntero al objeto real que contacta con userData
     GameObject* objA = reinterpret_cast<GameObject*>(bodyA->GetUserData().pointer);
     GameObject* objB = reinterpret_cast<GameObject*>(bodyB->GetUserData().pointer);
 
