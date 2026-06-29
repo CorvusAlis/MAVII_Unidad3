@@ -1,17 +1,55 @@
 #include "GameContactListener.h"
 
-void GameContactListener::BeginContact(
-    b2Contact* contact)
+#include "GameObject.h"
+#include "GameObjectType.h"
+
+void GameContactListener::BeginContact(b2Contact* contact)
 {
-    b2Fixture* fixtureA =
-        contact->GetFixtureA();
+    //recupero los fixture y body de los dos objetos que hacen contacto
+    b2Fixture* fixtureA = contact->GetFixtureA();
+    b2Fixture* fixtureB = contact->GetFixtureB();
 
-    b2Fixture* fixtureB =
-        contact->GetFixtureB();
+    b2Body* bodyA = fixtureA->GetBody();
+    b2Body* bodyB = fixtureB->GetBody();
 
-    b2Body* bodyA =
-        fixtureA->GetBody();
+    //obtengo puntero al objeto real que contacta
+    GameObject* objA = reinterpret_cast<GameObject*>(bodyA->GetUserData().pointer);
+    GameObject* objB = reinterpret_cast<GameObject*>(bodyB->GetUserData().pointer);
 
-    b2Body* bodyB =
-        fixtureB->GetBody();
+    if (!objA || !objB)
+    {
+        return;
+    }
+
+    //obtengo el tipo de objeto (caja/esfera/zona)
+    GameObjectType typeA = objA->GetType();
+    GameObjectType typeB = objB->GetType();
+
+    //devuelvo siempre el objeto entero (caja o esfera) para recuperar tipo, puntos, o lo que necesite del objeto
+    //TODO: unificar cajas/esferas a GameObject directamente, y ver despues segun el tipo de objeto
+    //contacto zona/caja
+    if ((typeA == GameObjectType::ZonaEntrega &&
+        typeB == GameObjectType::Caja))
+    {
+        premioEntregado = objB;
+    }
+
+    if ((typeB == GameObjectType::ZonaEntrega &&
+        typeA == GameObjectType::Caja))
+    {
+        premioEntregado = objA;
+    }
+
+    //contacto zona/esfera
+    if ((typeA == GameObjectType::ZonaEntrega &&
+        typeB == GameObjectType::Esfera))
+    {
+        premioEntregado = objB;
+    }
+
+    if ((typeB == GameObjectType::ZonaEntrega &&
+        typeA == GameObjectType::Esfera))
+    {
+        premioEntregado = objA;
+    }
 }

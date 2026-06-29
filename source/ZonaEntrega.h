@@ -25,4 +25,9 @@ public:
 
     b2Body* GetBody() const override;
     GameObjectType GetType() const override;
+
+    //TODO: sacar esto de aca. Crear una clase menos generica (premios o algo asi) solo para las esferas y cajas (y cualquier otro premio)
+    //incluso podria crear una clase que englobe garra, moto, zonaentrega y cosas que no tengan puntaje, no se borren, etc
+    //por ahora queda para cumplir con la interfaz de la clase GameObject generica
+    int GetPuntos() const override;
 };

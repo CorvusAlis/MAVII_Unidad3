@@ -17,4 +17,6 @@ public:
     virtual b2Body* GetBody() const = 0;
 
     virtual GameObjectType GetType() const = 0;
+
+    virtual int GetPuntos() const = 0;
 };

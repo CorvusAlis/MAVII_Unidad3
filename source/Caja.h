@@ -27,6 +27,6 @@ public:
     void Draw();
 
     b2Body* GetBody() const;
-    int GetPuntos() const;
+    int GetPuntos() const override;
     GameObjectType GetType() const override;
 };

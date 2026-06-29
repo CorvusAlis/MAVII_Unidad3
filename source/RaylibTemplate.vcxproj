@@ -24,7 +24,7 @@
     <ProjectGuid>{f0fafcf8-d32d-4ba8-a65c-6a8fa57d8349}</ProjectGuid>
     <RootNamespace>RaylibTemplate</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Actividad3</ProjectName>
+    <ProjectName>Actividad4</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

@@ -9,6 +9,7 @@
 #include "Caja.h"
 #include "Esfera.h"
 #include "ZonaEntrega.h"
+#include "GameContactListener.h"
 
 using namespace std;
 
@@ -19,12 +20,11 @@ private:
     Texture2D background;
 
     b2World* world;
-
     b2Body* groundBody;
+    GameContactListener contactListener;
 
     Motor* motor;
     GarraBase* garraBase;
-
     ZonaEntrega* zonaEntrega;
 
     vector<Caja*> cajas;

@@ -65,3 +65,8 @@ GameObjectType ZonaEntrega::GetType() const
 {
     return GameObjectType::ZonaEntrega;
 }
+
+int ZonaEntrega::GetPuntos() const
+{
+    return 0;
+}

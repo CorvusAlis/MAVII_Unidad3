@@ -6,7 +6,9 @@ GameManager::GameManager()
     background = LoadTexture("assets/fondo_cm.png");
 
     world = new b2World(b2Vec2(0.0f, 9.8f));
-   
+
+    world->SetContactListener(&contactListener);
+
     CreateBoundaries();
 
     motor = new Motor(*world);
@@ -74,7 +76,14 @@ void GameManager::Update()
     //primero actualizo la fisica, luego veo si algun objeto entro en la zona
     world->Step(1.0f / 60.0f, 8, 3);
 
-    CheckDeliveries();
+    //CheckDeliveries(); //ya no se usa CheckDeliveries(), ahora uso el ContactListener
+
+    if (contactListener.premioEntregado != nullptr)
+    {
+        scoreTotal += contactListener.premioEntregado->GetPuntos();
+
+        contactListener.premioEntregado = nullptr;
+    }
 }
 
 void GameManager::Draw()
@@ -108,6 +117,17 @@ void GameManager::Draw()
     if (gameOver)
     {
         DibujarUIGameOver();
+    }
+
+    if (contactListener.premioEntregado != nullptr)
+    {
+        DrawText(
+            "PREMIO DETECTADO",
+            20,
+            70,
+            25,
+            RED
+        );
     }
 
     EndDrawing();
@@ -242,44 +262,6 @@ void GameManager::CreateBoundaries() {
         &rightWallShape,
         0.0f
     );
-}
-
-//para detectar la entrega de un premio a la zona de entrega
-void GameManager::CheckDeliveries()
-{
-    for (auto it = cajas.begin();
-        it != cajas.end();)
-    {
-        if (zonaEntrega->Contiene((*it)->GetBody()))
-        {
-            scoreTotal += (*it)->GetPuntos();
-
-            delete* it;
-
-            it = cajas.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
-
-    for (auto it = esferas.begin();
-        it != esferas.end();)
-    {
-        if (zonaEntrega->Contiene((*it)->GetBody()))
-        {
-            scoreTotal += (*it)->GetPuntos();
-
-            delete* it;
-
-            it = esferas.erase(it);
-        }
-        else
-        {
-            ++it;
-        }
-    }
 }
 
 //reseteo toda la escena y creo de nuevo
