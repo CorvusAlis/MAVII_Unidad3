@@ -38,24 +38,41 @@ Esfera::Esfera(b2World& world, const string& rutaTextura, float x, float y, floa
 
 Esfera::~Esfera()
 {
-    if (body)
-    {
-        body->GetWorld()->DestroyBody(body);
-        body = nullptr;
-    }
+    body = nullptr;
+
+    UnloadTexture(esferaTexture);
 }
 
 void Esfera::Draw()
 {
     b2Vec2 pos = body->GetPosition();
 
-    DrawCircleV(
-        {
-            pos.x * SCALE,
-            pos.y * SCALE
-        },
+    Rectangle source = {
+        0,
+        0,
+        (float)esferaTexture.width,
+        (float)esferaTexture.height
+    };
+
+    Rectangle dest = {
+        pos.x * SCALE,
+        pos.y * SCALE,
+        radius * 2,
+        radius * 2
+    };
+
+    Vector2 origin = {
         radius,
-        color
+        radius
+    };
+
+    DrawTexturePro(
+        esferaTexture,
+        source,
+        dest,
+        origin,
+        body->GetAngle() * RAD2DEG,
+        WHITE
     );
 
     //para debug

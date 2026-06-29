@@ -35,11 +35,16 @@ Caja::Caja(b2World& world, const string& rutaTextura, float x, float y, float w,
 
 Caja::~Caja()
 {
-    if (body)
-    {
-        body->GetWorld()->DestroyBody(body);
-        body = nullptr;
-    }
+    body = nullptr;
+
+    UnloadTexture(cajaTexture);
+
+    //esto no va en esta version - el body se elimina desde GameManager, si se elimina aca tmb, se accede a un puntero nulo y da excepcion
+    //if (body)
+    //{
+    //    body->GetWorld()->DestroyBody(body);
+    //    body = nullptr;
+    //}
 }
 
 void Caja::Draw()
@@ -47,16 +52,33 @@ void Caja::Draw()
     b2Vec2 pos = body->GetPosition();
     float angle = body->GetAngle() * RAD2DEG;
 
-    Rectangle rect = {  //ahora esta bien con el centro del rectangulo
+    Rectangle source = {
+        0,
+        0,
+        (float)cajaTexture.width,
+        (float)cajaTexture.height
+    };
+
+    Rectangle dest = {
         pos.x * SCALE,
         pos.y * SCALE,
         width,
         height
     };
 
-    Vector2 origin = { width / 2.0f, height / 2.0f };
+    Vector2 origin = {
+        width / 2.0f,
+        height / 2.0f
+    };
 
-    DrawRectanglePro(rect, origin, angle, color);
+    DrawTexturePro(
+        cajaTexture,
+        source,
+        dest,
+        origin,
+        angle,
+        WHITE
+    );
 
     //debug
     if (DEBUG_MODE)

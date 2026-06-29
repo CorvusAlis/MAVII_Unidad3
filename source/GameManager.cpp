@@ -76,14 +76,7 @@ void GameManager::Update()
     //primero actualizo la fisica, luego veo si algun objeto entro en la zona
     world->Step(1.0f / 60.0f, 8, 3);
 
-    //CheckDeliveries(); //ya no se usa CheckDeliveries(), ahora uso el ContactListener
-
-    if (contactListener.premioEntregado != nullptr)
-    {
-        scoreTotal += contactListener.premioEntregado->GetPuntos();
-
-        contactListener.premioEntregado = nullptr;
-    }
+    CheckDeliveries(); //retomo el uso de CheckDeliveries pero con la logica del contactListener
 }
 
 void GameManager::Draw()
@@ -117,17 +110,6 @@ void GameManager::Draw()
     if (gameOver)
     {
         DibujarUIGameOver();
-    }
-
-    if (contactListener.premioEntregado != nullptr)
-    {
-        DrawText(
-            "PREMIO DETECTADO",
-            20,
-            70,
-            25,
-            RED
-        );
     }
 
     EndDrawing();
@@ -194,6 +176,53 @@ void GameManager::CreatePremios()
             1000
         )
     );
+}
+
+void GameManager::CheckDeliveries()
+{
+    if (contactListener.premioEntregado == nullptr)
+        return;
+
+    GameObject* premio = contactListener.premioEntregado;
+    GameObjectType tipo = premio->GetType();
+
+    scoreTotal += premio->GetPuntos();
+
+    //borrado del objeto que entro en la zona de entrega
+    //CAJAS
+    if (tipo == GameObjectType::Caja)
+    {
+        for (auto it = cajas.begin(); it != cajas.end(); ++it)
+        {
+            if (*it == premio)
+            {
+                world->DestroyBody((*it)->GetBody());
+                delete* it;
+                cajas.erase(it);
+
+                break;
+            }
+        }
+    }
+
+    //ESFERAS
+    else if (tipo == GameObjectType::Esfera)
+    {
+        for (auto it = esferas.begin(); it != esferas.end(); ++it)
+        {
+            if (*it == premio)
+            {
+                world->DestroyBody((*it)->GetBody());
+                delete* it;
+                esferas.erase(it);
+
+                break;
+            }
+        }
+    }
+
+    //dejo el puntero a null para otro evento
+    contactListener.premioEntregado = nullptr;
 }
 
 void GameManager::CreateBoundaries() {

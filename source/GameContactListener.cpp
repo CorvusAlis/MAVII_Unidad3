@@ -26,30 +26,18 @@ void GameContactListener::BeginContact(b2Contact* contact)
     GameObjectType typeB = objB->GetType();
 
     //devuelvo siempre el objeto entero (caja o esfera) para recuperar tipo, puntos, o lo que necesite del objeto
-    //TODO: unificar cajas/esferas a GameObject directamente, y ver despues segun el tipo de objeto
-    //contacto zona/caja
-    if ((typeA == GameObjectType::ZonaEntrega &&
-        typeB == GameObjectType::Caja))
+    //uso GameObject directamente y recupero el tipo de objeto
+    if (typeA == GameObjectType::ZonaEntrega &&
+        typeB != GameObjectType::ZonaEntrega)
     {
         premioEntregado = objB;
+        return;
     }
 
-    if ((typeB == GameObjectType::ZonaEntrega &&
-        typeA == GameObjectType::Caja))
+    if (typeB == GameObjectType::ZonaEntrega &&
+        typeA != GameObjectType::ZonaEntrega)
     {
         premioEntregado = objA;
-    }
-
-    //contacto zona/esfera
-    if ((typeA == GameObjectType::ZonaEntrega &&
-        typeB == GameObjectType::Esfera))
-    {
-        premioEntregado = objB;
-    }
-
-    if ((typeB == GameObjectType::ZonaEntrega &&
-        typeA == GameObjectType::Esfera))
-    {
-        premioEntregado = objA;
+        return;
     }
 }
